@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('password');
             $table->string('image')->nullable();
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
+            $table->unsignedBigInteger('role_id')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();
