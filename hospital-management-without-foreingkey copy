@@ -1,0 +1,252 @@
+-- ========================
+-- MASTER TABLES (ENUM REPLACEMENT)
+-- ========================
+
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) UNIQUE
+);
+
+CREATE TABLE genders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(20) UNIQUE
+);
+
+CREATE TABLE appointment_status (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+CREATE TABLE bed_status (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+CREATE TABLE admission_status (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+CREATE TABLE payment_methods (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+CREATE TABLE attendance_status (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+-- ========================
+-- USERS
+-- ========================
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150),
+    email VARCHAR(150) UNIQUE,
+    phone VARCHAR(20),
+    password VARCHAR(255),
+    role_id INT,
+    status TINYINT DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ========================
+-- DEPARTMENTS
+-- ========================
+
+CREATE TABLE departments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150),
+    description TEXT,
+    status TINYINT DEFAULT 1
+);
+
+-- ========================
+-- DOCTORS
+-- ========================
+
+CREATE TABLE doctors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    department_id INT,
+    specialization VARCHAR(150),
+    phone VARCHAR(20),
+    fee DECIMAL(10,2),
+    status TINYINT DEFAULT 1
+);
+
+-- ========================
+-- PATIENTS
+-- ========================
+
+CREATE TABLE patients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    patient_code VARCHAR(50),
+    name VARCHAR(150),
+    gender_id INT,
+    age INT,
+    blood_group VARCHAR(10),
+    phone VARCHAR(20),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ========================
+-- APPOINTMENTS
+-- ========================
+
+CREATE TABLE appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT,
+    doctor_id INT,
+    department_id INT,
+    appointment_date DATE,
+    appointment_time TIME,
+    status_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ========================
+-- DOCTOR SCHEDULE
+-- ========================
+
+CREATE TABLE schedules (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    doctor_id INT,
+    day VARCHAR(20),
+    start_time TIME,
+    end_time TIME,
+    status TINYINT DEFAULT 1
+);
+
+-- ========================
+-- PRESCRIPTIONS
+-- ========================
+
+CREATE TABLE prescriptions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT,
+    doctor_id INT,
+    note TEXT,
+    prescribed_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE prescription_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    prescription_id INT,
+    medicine_name VARCHAR(150),
+    dose VARCHAR(50),
+    duration VARCHAR(50),
+    instructions TEXT
+);
+
+-- ========================
+-- PHARMACY / MEDICINES
+-- ========================
+
+CREATE TABLE medicines (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150),
+    category VARCHAR(100),
+    price DECIMAL(10,2),
+    stock INT,
+    expiry_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ========================
+-- LAB TESTS
+-- ========================
+
+CREATE TABLE lab_tests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    test_name VARCHAR(150),
+    price DECIMAL(10,2),
+    status TINYINT DEFAULT 1
+);
+
+CREATE TABLE lab_reports (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT,
+    test_id INT,
+    result TEXT,
+    report_date DATE
+);
+
+-- ========================
+-- ADMISSION & BED
+-- ========================
+
+CREATE TABLE beds (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    bed_number VARCHAR(50),
+    ward VARCHAR(50),
+    status_id INT
+);
+
+CREATE TABLE admissions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT,
+    bed_id INT,
+    admitted_date DATE,
+    discharged_date DATE,
+    status_id INT
+);
+
+-- ========================
+-- BILLING & PAYMENTS
+-- ========================
+
+CREATE TABLE invoices (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT,
+    total_amount DECIMAL(10,2),
+    discount DECIMAL(10,2),
+    payable_amount DECIMAL(10,2),
+    bill_date DATE
+);
+
+CREATE TABLE payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    invoice_id INT,
+    amount DECIMAL(10,2),
+    method_id INT,
+    payment_date DATE
+);
+
+-- ========================
+-- STAFF (HR)
+-- ========================
+
+CREATE TABLE staff (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150),
+    role VARCHAR(100),
+    phone VARCHAR(20),
+    salary DECIMAL(10,2),
+    join_date DATE,
+    status TINYINT DEFAULT 1
+);
+
+CREATE TABLE attendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    staff_id INT,
+    date DATE,
+    status_id INT
+);
+
+-- ========================
+-- ACTIVITY LOG
+-- ========================
+
+CREATE TABLE activity_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    module VARCHAR(100),
+    action TEXT,
+    log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
